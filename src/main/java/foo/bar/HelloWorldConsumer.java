@@ -16,11 +16,14 @@
  */
 package foo.bar;
 
-import java.util.Date;
+import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.ScheduledPollConsumer;
+import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHIssueState;
+import org.kohsuke.github.GHRepository;
 
 /**
  * The HelloWorld consumer.
@@ -37,19 +40,14 @@ public class HelloWorldConsumer extends ScheduledPollConsumer {
     protected int poll() throws Exception {
         Exchange exchange = endpoint.createExchange();
 
-        // create a message body
-        Date now = new Date();
-        exchange.getIn().setBody("Hello World! The time is " + now);
+        String repo = (String) endpoint.getEndpointConfiguration().getParameter("repository");
+        String token = (String) endpoint.getEndpointConfiguration().getParameter("token");
 
-        try {
-            // send message to next processor in the route
-            getProcessor().process(exchange);
-            return 1; // number of messages polled
-        } finally {
-            // log exception if an exception occurred and was not handled
-            if (exchange.getException() != null) {
-                getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());
-            }
-        }
+        GHRepository repository = new GitHubFactory().createRepo(token, repo);
+
+        List<GHIssue> issues = repository.getIssues(GHIssueState.ALL);
+        exchange.getIn().setBody(issues);
+        return issues.size();
+
     }
 }

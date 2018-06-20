@@ -23,7 +23,7 @@ import org.junit.Test;
 
 public class HelloWorldComponentTest extends CamelTestSupport {
 
-    @Test
+    /*@Test
     public void testHelloWorld() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);       
@@ -40,5 +40,5 @@ public class HelloWorldComponentTest extends CamelTestSupport {
                   .to("mock:result");
             }
         };
-    }
+    }*/
 }

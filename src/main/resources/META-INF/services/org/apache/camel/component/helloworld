@@ -16,3 +16,5 @@
 #
 
 class=foo.bar.HelloWorldComponent
+repository=heiko-braun/camel-github-issues
+token=88afdd009b19ec3bc166101944a8251183cbcc1b
